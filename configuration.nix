@@ -126,6 +126,11 @@
       # Enable window controls (minimize, maximize, close buttons)
       ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/wm/preferences/button-layout "'appmenu:minimize,maximize,close'"
       
+      # Set wallpaper (replace URL with your GitHub raw file URL)
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/background/picture-uri "'file:///etc/nixos/wallpaper.jpg'"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/background/picture-uri-dark "'file:///etc/nixos/wallpaper.jpg'"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/background/picture-options "'zoom'"
+      
       # Enable dash-to-panel extension
       ${pkgs.dconf}/bin/dconf write /org/gnome/shell/enabled-extensions "['dash-to-panel@jderose9.github.com', 'arcmenu@arcmenu.com']"
       
@@ -173,6 +178,14 @@
   
   # Enable Tailscale VPN service
   services.tailscale.enable = true;
+
+  # Download wallpaper from GitHub (replace with your repo URL)
+  environment.etc."wallpaper.jpg" = {
+    source = pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/keythnovar-cpu/nix-os/refs/heads/main/wallpaper.png";
+      sha256 = "0qcbw2ddp5qw795bg48zbgxbn91jh328k95ggmyf0pqkanpczimw"; # You'll need to update this
+    };
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
