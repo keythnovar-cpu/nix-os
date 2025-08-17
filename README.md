@@ -1,2 +1,0 @@
-# nix-os
-nix
