@@ -168,6 +168,9 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable Flatpak
+  services.flatpak.enable = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -188,6 +191,9 @@
     docker-compose
     github-desktop
     gnome-screenshot  # Old GNOME screenshot tool for interactive screenshots
+    dbeaver-bin       # Universal database tool
+    nextcloud-client  # Nextcloud desktop client
+    gnome-software    # GNOME Software store with Flatpak integration
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
