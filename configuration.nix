@@ -61,6 +61,9 @@
   # Enable virtualization services for QEMU/KVM
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
+  
+  # Enable Docker
+  virtualisation.docker.enable = true;
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -85,7 +88,7 @@
   users.users.kirus = {
     isNormalUser = true;
     description = "kirus";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -149,8 +152,8 @@
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
     git
-    google-chrome
     firefox
+    google-chrome
     gnome-tweaks
     gnomeExtensions.dash-to-panel
     gnomeExtensions.arcmenu
@@ -160,6 +163,8 @@
     qemu_kvm
     virt-manager
     virt-viewer
+    docker-compose
+    github-desktop
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
