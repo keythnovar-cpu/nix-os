@@ -123,6 +123,9 @@
       ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita-dark'"
       ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
       
+      # Enable window controls (minimize, maximize, close buttons)
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/wm/preferences/button-layout "'appmenu:minimize,maximize,close'"
+      
       # Enable dash-to-panel extension
       ${pkgs.dconf}/bin/dconf write /org/gnome/shell/enabled-extensions "['dash-to-panel@jderose9.github.com', 'arcmenu@arcmenu.com']"
       
@@ -136,6 +139,22 @@
       ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-padding 4
       ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/show-favorites true
       ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/show-running-apps true
+      
+      # Custom keyboard shortcuts using old GNOME Screenshot tool
+      # Interactive area screenshot with Alt+S
+      ${pkgs.dconf}/bin/dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Alt>s'"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'gnome-screenshot --area'"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name "'Screenshot Area'"
+      
+      # Set custom keybindings list
+      ${pkgs.dconf}/bin/dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+      
+      # Lock screen with Alt+L
+      ${pkgs.dconf}/bin/dconf write /org/gnome/settings-daemon/plugins/media-keys/screensaver "['<Alt>l']"
+      
+      # Clear default conflicting shortcuts if they exist
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/wm/keybindings/panel-main-menu "@as []"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/keybindings/open-application-menu "@as []"
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -168,6 +187,7 @@
     virt-viewer
     docker-compose
     github-desktop
+    gnome-screenshot  # Old GNOME screenshot tool for interactive screenshots
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
