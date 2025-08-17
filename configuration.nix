@@ -170,6 +170,9 @@
 
   # Enable Flatpak
   services.flatpak.enable = true;
+  
+  # Enable Tailscale VPN service
+  services.tailscale.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -194,6 +197,8 @@
     dbeaver-bin       # Universal database tool
     nextcloud-client  # Nextcloud desktop client
     gnome-software    # GNOME Software store with Flatpak integration
+    tailscale         # Tailscale VPN client
+    tailscale-systray # Tailscale system tray GUI
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
