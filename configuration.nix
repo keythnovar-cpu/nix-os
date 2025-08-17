@@ -1,6 +1,6 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running 'nixos-help').
 
 { config, pkgs, ... }:
 
@@ -58,6 +58,10 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Enable virtualization services for QEMU/KVM
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -77,11 +81,11 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.kirus = {
     isNormalUser = true;
     description = "kirus";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -94,6 +98,44 @@
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
+
+  # Enable dconf for GNOME settings
+  programs.dconf.enable = true;
+  
+  # Set up environment variables for dark theme
+  environment.variables = {
+    GTK_THEME = "Adwaita:dark";
+  };
+
+  # Systemd service to apply GNOME settings including dark mode and dash-to-panel config
+  systemd.user.services.gnome-settings = {
+    description = "Apply GNOME Settings";
+    wantedBy = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    script = ''
+      # Apply dark mode
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita-dark'"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
+      
+      # Enable dash-to-panel extension
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/enabled-extensions "['dash-to-panel@jderose9.github.com', 'arcmenu@arcmenu.com']"
+      
+      # Configure dash-to-panel favorite apps (pinned apps)
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'firefox.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Settings.desktop']"
+      
+      # Dash-to-panel specific settings
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/panel-positions '"{\"0\":\"BOTTOM\"}"'
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/panel-sizes '"{\"0\":48}"'
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-margin 8
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-padding 4
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/show-favorites true
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/show-running-apps true
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+  };
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -109,7 +151,14 @@
     git
     firefox
     gnome-tweaks
-    gnomeExtensions.dash-to-panel    
+    gnomeExtensions.dash-to-panel
+    gnomeExtensions.arcmenu
+    vscode
+    jetbrains.pycharm-community
+    qemu
+    qemu_kvm
+    virt-manager
+    virt-viewer
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -133,7 +182,7 @@
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # on your system were taken. It's perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
