@@ -199,6 +199,7 @@
     gnome-tweaks
     gnomeExtensions.dash-to-panel
     gnomeExtensions.arcmenu
+
     vscode
     jetbrains.pycharm-community
     qemu
