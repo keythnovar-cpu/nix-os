@@ -212,6 +212,10 @@
     gnome-software    # GNOME Software store with Flatpak integration
     tailscale         # Tailscale VPN client
     tailscale-systray # Tailscale system tray GUI
+    
+    kdePackages.okular
+    libreoffice
+    
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
