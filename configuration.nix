@@ -135,7 +135,7 @@
       ${pkgs.dconf}/bin/dconf write /org/gnome/shell/enabled-extensions "['dash-to-panel@jderose9.github.com', 'arcmenu@arcmenu.com']"
       
       # Configure dash-to-panel favorite apps (pinned apps)
-      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'firefox.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Settings.desktop', 'google-chrome.desktop']"
+      ${pkgs.dconf}/bin/dconf write /org/gnome/shell/favorite-apps "['org.gnome.Nautilus.desktop', 'org.gnome.Console.desktop','firefox.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.TextEditor.desktop', 'org.gnome.Settings.desktop', 'google-chrome.desktop']"
       
       # Dash-to-panel specific settings
       ${pkgs.dconf}/bin/dconf write /org/gnome/shell/extensions/dash-to-panel/panel-positions '"{\"0\":\"BOTTOM\"}"'
